@@ -21,28 +21,28 @@ import javax.swing.table.DefaultTableModel;
  * @author Yitbarek
  */
 public class DatabaseService {
-    
-    public boolean resetUserPassword(String username, String newPassword) throws Exception {
-    String sql = "UPDATE login SET EmpPass = ? WHERE EmpUserName = ? AND EmpStatus = 'Active'";
-    try (Connection conn = getConnection();
-         PreparedStatement stmt = conn.prepareStatement(sql)) {
-        stmt.setString(1, newPassword);
-        stmt.setString(2, username);
-        int updated = stmt.executeUpdate();
-        return updated > 0;
-    }
-}
 
-    
+    public boolean resetUserPassword(String username, String newPassword) throws Exception {
+        String sql = "UPDATE login SET EmpPass = ? WHERE EmpUserName = ? AND EmpStatus = 'Active'";
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, newPassword);
+            stmt.setString(2, username);
+            int updated = stmt.executeUpdate();
+            return updated > 0;
+        }
+    }
+
+
     public boolean archiveUser(String username) throws Exception {
-      String query = "UPDATE login SET EmpStatus = 'Inactive' WHERE EmpUserName = ? AND EmpStatus = 'Active'";
-      try (Connection conn = getConnection();
-           PreparedStatement stmt = conn.prepareStatement(query)) {
-          stmt.setString(1, username);
-          int affected = stmt.executeUpdate();
-          return affected > 0;
-      }
-  }
+        String query = "UPDATE login SET EmpStatus = 'Inactive' WHERE EmpUserName = ? AND EmpStatus = 'Active'";
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, username);
+            int affected = stmt.executeUpdate();
+            return affected > 0;
+        }
+    }
 
 
     String[] searchUser(String username) throws Exception {
@@ -85,14 +85,14 @@ public class DatabaseService {
 
     public boolean addDepartment(String name) throws SQLException, Exception {
         String normalized = name.trim().toLowerCase();
-        
+
         if (getAbbreviation(normalized) != null) {
             return false;
         }
         String baseAbbrev = generateAbbreviation(name);
         String uniqueAbbrev = ensureUniqueAbbreviation(baseAbbrev);
         String sql = "INSERT INTO departments (department, abbreviation) VALUES (?, ?)";
-        
+
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, normalized);
@@ -140,7 +140,7 @@ public class DatabaseService {
     public String getAbbreviation(String name) throws SQLException, Exception {
         String sql = "SELECT abbreviation FROM departments WHERE department = ?";
         try (Connection conn = getConnection();
-                PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, name.trim().toLowerCase());
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
@@ -149,8 +149,8 @@ public class DatabaseService {
             return null;
         }
     }
-    
-    
+
+
     public Connection getConnection() throws Exception {
         Properties config = Supporter.loadConfig();
         String url = config.getProperty("database.url");
@@ -166,7 +166,7 @@ public class DatabaseService {
         try (Connection conn = getConnection();
              PreparedStatement pst = conn.prepareStatement(sql)) {
             pst.setString(1, "%" + searchValue + "%");
-            ResultSet rs = pst.executeQuery();          
+            ResultSet rs = pst.executeQuery();
             DefaultTableModel model = (DefaultTableModel) table.getModel();
             model.setRowCount(0);
             Object[] row;
@@ -183,7 +183,7 @@ public class DatabaseService {
             JOptionPane.showMessageDialog(null, e);
         }
     }
-    
+
     public List<String> userDetail(String username) {
         String sql = "SELECT EmpRole, EmpDep FROM login WHERE EmpUserName = ?";
         List<String> details = new ArrayList<>();
@@ -243,10 +243,37 @@ public class DatabaseService {
                 return true;
             }
         } catch (SQLException ex) {
-            ex.printStackTrace(); 
-            return false; 
+            ex.printStackTrace();
+            return false;
         }
     }
+
+    public boolean signupMessages_Head(String department, String username) throws Exception {
+        String query = "SELECT MessageID FROM messages WHERE MessageType IN ('broadcast', 'request') AND ToDep = ?";
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+            pstmt.setString(1, department);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    int MessageID = rs.getInt("MessageID");
+                    String sql3 = "INSERT INTO usermessage (user_id, message_id, is_read) VALUES (?, ?, ?)";
+
+                    try (PreparedStatement pst1 = conn.prepareStatement(sql3)) {
+                        pst1.setString(1, username);
+                        pst1.setInt(2, MessageID);
+                        pst1.setBoolean(3, false);
+                        pst1.executeUpdate();
+                    }
+                }
+                return true;
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
 
 
     public void saveMessage(String file_type, String file_name, String MessType, String sender, String recipient, String message) throws Exception {
@@ -261,7 +288,7 @@ public class DatabaseService {
                 usernames.add(userName);
             }
         }
-        String sql = "INSERT INTO messages (file_name, MessageType, toDep, EmpUserName, note, file_type, timestamp ) VALUES (?, ?, ?, ?, ?, ? NOW())";
+        String sql = "INSERT INTO messages (file_name, MessageType, toDep, EmpUserName, note, file_type, timestamp ) VALUES (?, ?, ?, ?, ?, ?, NOW())";
         int messageId = -1;
         try (Connection conn = getConnection();
              PreparedStatement pst = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -377,7 +404,7 @@ public class DatabaseService {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
-               return resultSet.getString("EmpDep");
+                return resultSet.getString("EmpDep");
             } else {
                 return null;
             }
@@ -432,13 +459,13 @@ public class DatabaseService {
                         pst1.executeBatch();
                     }
                 }
-                } catch(SQLException ex){
-                    ex.printStackTrace();
-                    return false;
-                }
-                return true;
+            } catch(SQLException ex){
+                ex.printStackTrace();
+                return false;
             }
+            return true;
         }
     }
+}
 
   
