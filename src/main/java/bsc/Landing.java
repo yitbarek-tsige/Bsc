@@ -922,7 +922,7 @@ public void users(String username){
     private void signout_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signout_ButtonActionPerformed
         this.setVisible(false); 
         dispose();
-        Login log = new Login();
+        UserLogin log = new UserLogin();
         log.setVisible(true);
     }//GEN-LAST:event_signout_ButtonActionPerformed
 
