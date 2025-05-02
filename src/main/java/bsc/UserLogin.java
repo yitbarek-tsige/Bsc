@@ -8,14 +8,14 @@ import javax.swing.JOptionPane;
  *
  * @author Yitbarek
  */
-public class Login extends javax.swing.JFrame {
-    private static final Preferences prefs = Preferences.userNodeForPackage(Login.class);
+public class UserLogin extends javax.swing.JFrame {
+    private static final Preferences prefs = Preferences.userNodeForPackage(UserLogin.class);
     private String savedUsername;
 
     /**
      * Creates new form landing
      */
-    public Login() {
+    public UserLogin() {
         loadUsername();
         initComponents();
         LoginError.setVisible(false);
@@ -251,20 +251,20 @@ if (result != JOptionPane.YES_OPTION) return;
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UserLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UserLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UserLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UserLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Login().setVisible(true);
+                new UserLogin().setVisible(true);
             }
         });
     }
