@@ -274,6 +274,47 @@ public class DatabaseService {
         }
     }
 
+    
+    
+public void saveMessagePrivate(String file_type, String file_name, String MessType, String sender, String recipient, String message) throws Exception {
+    String sql = "INSERT INTO messages (file_name, MessageType, toDep, EmpUserName, note, file_type, timestamp) VALUES (?, ?, ?, ?, ?, ?, NOW())";
+    int messageId = -1;
+
+    try (Connection conn = getConnection();
+         PreparedStatement pst = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+        pst.setString(1, file_name);
+        pst.setString(2, MessType);
+        pst.setString(3, recipient);
+        pst.setString(4, sender);
+        pst.setString(5, message);
+        pst.setString(6, file_type);
+        pst.executeUpdate();
+
+        ResultSet generatedKeys = pst.getGeneratedKeys();
+        if (generatedKeys.next()) {
+            messageId = generatedKeys.getInt(1);
+        } else {
+            throw new SQLException("Failed to retrieve generated message ID.");
+        }
+
+        String sql3 = "INSERT INTO usermessage (user_id, message_id, is_read) VALUES (?, ?, ?)";
+        try (PreparedStatement pst1 = conn.prepareStatement(sql3)) {
+            pst1.setString(1, sender);
+            pst1.setInt(2, messageId);
+            pst1.setBoolean(3, true);
+            pst1.executeUpdate();
+
+            pst1.setString(1, recipient);
+            pst1.setInt(2, messageId);
+            pst1.setBoolean(3, false);
+            pst1.executeUpdate();
+        }
+
+    }
+}
+
+    
 
 
     public void saveMessage(String file_type, String file_name, String MessType, String sender, String recipient, String message) throws Exception {
@@ -339,60 +380,70 @@ public class DatabaseService {
 
 
     public List<Message> fetchMessages(String role, String username, String department) throws Exception {
-        List<Message> messages = new ArrayList<>();
-        String sql;
-        if (role.equals("user")) {
-            sql = """
-                    SELECT m.MessageID, m.file_name, m.file_type, m.ToDep, m.EmpUserName, m.timestamp, m.note, u.is_read 
-                    FROM messages m
-                    LEFT JOIN usermessage u ON m.MessageID = u.message_id AND u.user_id = ?
-                    WHERE (m.MessageType = 'broadcast' AND m.ToDep = ?)
-                    OR (m.MessageType='request' AND m.EmpUserName = ?)
-                    OR (m.EmpUserName = ?)
-                    """;
-        } else if (role.equals("head")) {
-            sql = """
-                    SELECT m.MessageID, m.file_name, m.file_type, m.ToDep, m.EmpUserName, m.timestamp, m.note, u.is_read 
-                    FROM messages m
-                    LEFT JOIN usermessage u ON m.MessageID = u.message_id AND u.user_id = ?
-                    WHERE (m.MessageType IN ('Request', 'broadcast')) 
-                    AND (m.ToDep = ? OR m.EmpUserName = ?)
-                    """;
-        } else {
-            return messages;
-        }
+    List<Message> messages = new ArrayList<>();
+    String sql;
 
-        try (Connection conn = getConnection();
-             PreparedStatement pst = conn.prepareStatement(sql)) {
-            if (role.equals("user")) {
-                pst.setString(1, username);
-                pst.setString(2, department);
-                pst.setString(3, username);
-                pst.setString(4, username);
-            } else if (role.equals("head")) {
-                pst.setString(1, username);
-                pst.setString(2, department);
-                pst.setString(3, username);
-            }
-            ResultSet rs = pst.executeQuery();
-            while (rs.next()) {
-                int messageId = rs.getInt("MessageID");
-                String from = rs.getString("EmpUserName");
-                String file = rs.getString("file_name");
-                String file_type = rs.getString("file_type");
-                String toDept = rs.getString("ToDep");
-                String content = rs.getString("note");
-                boolean isRead = rs.getBoolean("is_read");
-                String timestamp = rs.getString("timestamp");
-
-                messages.add(new Message(messageId, from, content, isRead, timestamp, toDept, file, file_type));
-            }
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
+    if (role.equals("user")) {
+        sql = """
+                SELECT m.MessageID, m.file_name, m.file_type, m.ToDep, m.EmpUserName, m.timestamp, m.note, u.is_read 
+                FROM messages m
+                LEFT JOIN usermessage u ON m.MessageID = u.message_id AND u.user_id = ?
+                WHERE 
+                    (m.MessageType = 'broadcast' AND m.ToDep = ?) OR
+                    (m.MessageType = 'Request' AND m.EmpUserName = ?) OR
+                    (m.MessageType = 'private' AND m.ToDep = ?) OR
+                    (m.EmpUserName = ?)
+              """;
+    } else if (role.equals("head")) {
+        sql = """
+                SELECT m.MessageID, m.file_name, m.file_type, m.ToDep, m.EmpUserName, m.timestamp, m.note, u.is_read 
+                FROM messages m
+                LEFT JOIN usermessage u ON m.MessageID = u.message_id AND u.user_id = ?
+                WHERE 
+                    m.MessageType IN ('Request', 'broadcast', 'private') AND 
+                    (m.ToDep = ? OR m.ToDep = ? OR m.EmpUserName = ?)
+              """;
+    } else {
         return messages;
     }
+
+    try (Connection conn = getConnection();
+         PreparedStatement pst = conn.prepareStatement(sql)) {
+
+        if (role.equals("user")) {
+            pst.setString(1, username);   // usermessage join
+            pst.setString(2, department); // broadcast match
+            pst.setString(3, username);   // Request by user
+            pst.setString(4, username);   // private to user
+            pst.setString(5, username);   // sent by user
+        } else if (role.equals("head")) {
+            pst.setString(1, username);   // usermessage join
+            pst.setString(2, department); // broadcast to dept
+            pst.setString(3, username);   // private to head
+            pst.setString(4, username);   // sent by head
+        }
+
+        ResultSet rs = pst.executeQuery();
+        while (rs.next()) {
+            int messageId = rs.getInt("MessageID");
+            String from = rs.getString("EmpUserName");
+            String file = rs.getString("file_name");
+            String file_type = rs.getString("file_type");
+            String toDept = rs.getString("ToDep");
+            String content = rs.getString("note");
+            boolean isRead = rs.getBoolean("is_read");
+            String timestamp = rs.getString("timestamp");
+
+            messages.add(new Message(messageId, from, content, isRead, timestamp, toDept, file, file_type));
+        }
+
+    } catch (SQLException ex) {
+        ex.printStackTrace();
+    }
+
+    return messages;
+}
+
 
     public String DeptFetcher(String username) {
         String query = "SELECT EmpDep FROM login WHERE EmpUserName = ?";

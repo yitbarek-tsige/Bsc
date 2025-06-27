@@ -58,6 +58,7 @@ public void users(String username){
         Role.setText("USER");
         MD_Reject_Button.setVisible(false);
         MD_Approve_Button.setVisible(false);
+        isPrivateCheckbox.setVisible(false);
         }
      else if (role.equals("head")) {
         Role.setText("HEAD");}
@@ -187,6 +188,7 @@ public void users(String username){
         MD_Note_Area = new javax.swing.JTextArea();
         MD_Reject_Button = new javax.swing.JButton();
         MD_Approve_Button = new javax.swing.JButton();
+        isPrivateCheckbox = new javax.swing.JCheckBox();
         Check_Authentic_Document_Panel = new javax.swing.JPanel();
         Check_Authentic_Document_Titlebar = new javax.swing.JLabel();
         Filename_Label = new javax.swing.JLabel();
@@ -205,7 +207,7 @@ public void users(String username){
         signout_Button = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("MOSS");
+        setTitle("UoG-OSS");
         setBackground(new java.awt.Color(0, 0, 0));
         setResizable(false);
 
@@ -558,58 +560,65 @@ public void users(String username){
             }
         });
 
+        isPrivateCheckbox.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        isPrivateCheckbox.setText("Private");
+        isPrivateCheckbox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                isPrivateCheckboxActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout Message_Detail_PanelLayout = new javax.swing.GroupLayout(Message_Detail_Panel);
         Message_Detail_Panel.setLayout(Message_Detail_PanelLayout);
         Message_Detail_PanelLayout.setHorizontalGroup(
             Message_Detail_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(Message_Detail_PanelLayout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(6, 6, 6)
                 .addGroup(Message_Detail_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(Message_Detail_PanelLayout.createSequentialGroup()
-                        .addComponent(Message_Request_Titlebar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())
+                        .addComponent(MD_Timestamp_Label)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(MD_Timestamp_Detail, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(Message_Detail_PanelLayout.createSequentialGroup()
-                        .addGap(12, 12, 12)
                         .addGroup(Message_Detail_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(Message_Request_Titlebar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(Message_Detail_PanelLayout.createSequentialGroup()
-                                .addComponent(MD_Timestamp_Label)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(MD_Timestamp_Detail, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addGroup(Message_Detail_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(MD_Note_Label)
+                                    .addComponent(MD_Note_Detail, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(Message_Detail_PanelLayout.createSequentialGroup()
+                                        .addGap(83, 83, 83)
+                                        .addComponent(MD_Preview_Button, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))))
                             .addGroup(Message_Detail_PanelLayout.createSequentialGroup()
                                 .addGroup(Message_Detail_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(Message_Detail_PanelLayout.createSequentialGroup()
-                                        .addComponent(MD_From_Label)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(MD_From_Detail, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(Message_Detail_PanelLayout.createSequentialGroup()
-                                        .addComponent(MD_To_Label)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(MD_To_Detail, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(Message_Detail_PanelLayout.createSequentialGroup()
-                                        .addComponent(MD_Document_Type_Label)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(MD_Document_Type_Detail, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addContainerGap(30, Short.MAX_VALUE))))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, Message_Detail_PanelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(Message_Detail_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(Message_Detail_PanelLayout.createSequentialGroup()
-                        .addComponent(MD_Filename_Label)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(Message_Detail_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(MD_Filename_Detail, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(Message_Detail_PanelLayout.createSequentialGroup()
-                                .addGap(2, 2, 2)
-                                .addComponent(MD_Approve_Button)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(MD_Reject_Button))))
-                    .addComponent(MD_Note_Label)
-                    .addComponent(MD_Note_Detail, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(Message_Detail_PanelLayout.createSequentialGroup()
-                        .addGap(83, 83, 83)
-                        .addComponent(MD_Preview_Button, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                                    .addComponent(MD_Filename_Label)
+                                    .addGroup(Message_Detail_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(MD_Filename_Detail, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(Message_Detail_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(Message_Detail_PanelLayout.createSequentialGroup()
+                                                .addComponent(MD_From_Label)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(MD_From_Detail, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(Message_Detail_PanelLayout.createSequentialGroup()
+                                                .addComponent(MD_To_Label)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(MD_To_Detail, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(Message_Detail_PanelLayout.createSequentialGroup()
+                                                .addComponent(MD_Document_Type_Label)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(MD_Document_Type_Detail, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addContainerGap())))
+            .addGroup(Message_Detail_PanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(isPrivateCheckbox)
+                .addGap(12, 12, 12)
+                .addComponent(MD_Approve_Button)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(MD_Reject_Button)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         Message_Detail_PanelLayout.setVerticalGroup(
             Message_Detail_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -644,9 +653,10 @@ public void users(String username){
                 .addComponent(MD_Note_Detail, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(Message_Detail_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(isPrivateCheckbox)
                     .addComponent(MD_Reject_Button)
                     .addComponent(MD_Approve_Button))
-                .addGap(47, 47, 47))
+                .addGap(48, 48, 48))
         );
 
         Check_Authentic_Document_Panel.setBackground(new java.awt.Color(255, 255, 255));
@@ -820,9 +830,7 @@ public void users(String username){
                     .addComponent(Message_Detail_Panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(Inbox_Panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(Check_Authentic_Document_Panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(Request_Digital_Stamp_Panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                    .addComponent(Request_Digital_Stamp_Panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         pack();
@@ -832,7 +840,7 @@ public void users(String username){
         
  if (evt.getSource() == AttachBtn) {
     JFileChooser fileChooser = new JFileChooser();
-    FileNameExtensionFilter pdfFilter = new FileNameExtensionFilter("PDF Files", "pdf");
+    FileNameExtensionFilter pdfFilter = new FileNameExtensionFilter("PDF Files", "..kkk.pdf");
     fileChooser.setFileFilter(pdfFilter);
     int res = fileChooser.showOpenDialog(null); 
     if (res == JFileChooser.APPROVE_OPTION) {
@@ -876,30 +884,63 @@ public void users(String username){
     }//GEN-LAST:event_MD_Preview_ButtonActionPerformed
 
     private void MD_Reject_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MD_Reject_ButtonActionPerformed
-        String RejectedMessage = "Document is rejected by " + username;
-        try {
-            dbService.saveMessage(selectedMessage.getFile_Type(), pdfFile_Name.getName(),"broadcast",username, selectedMessage.getToDept(), RejectedMessage);
-            JOptionPane.showMessageDialog(this, "Document Rejected!");
-              } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error sending message: " + e.getMessage());
+        String rejectedMessage = "Document is rejected by " + username;
+    String originalSender = selectedMessage.getUsername();
+    String recipientDept = dbService.DeptFetcher(originalSender);
+
+    try {
+        if (isPrivateCheckbox.isSelected()) {
+            dbService.saveMessagePrivate(
+                selectedMessage.getFile_Type(),
+                pdfFile_Name.getName(),
+                "private",
+                username,
+                originalSender,
+                rejectedMessage
+            );
+        } else {
+            dbService.saveMessage(
+                selectedMessage.getFile_Type(),
+                pdfFile_Name.getName(),
+                "broadcast",
+                username,
+                recipientDept,
+                rejectedMessage
+            );
         }
+        JOptionPane.showMessageDialog(this, "Document Rejected!");
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Error sending message: " + e.getMessage());
+    }
     }//GEN-LAST:event_MD_Reject_ButtonActionPerformed
 
     private void MD_Approve_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MD_Approve_ButtonActionPerformed
-        String stampText = "Approved by " + username + " on " +
-                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        String AppprovedMessage = "Document have been approved and digitally stamped by " + username;
+    String stampText = "Approved by " + username + " on " +
+            LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+    String approvedMessage = "Document has been approved and digitally stamped by " + username;
 
-        try {      
-            String x = a.addDigitalStamp(pdfFile_Name.getName(), stampText, selectedMessage.getFile_Type());  
-            if(x!=null){
-             dbService.saveMessage(selectedMessage.getFile_Type(), x, "broadcast", username, dbService.DeptFetcher(selectedMessage.getUsername()), AppprovedMessage);
-             JOptionPane.showMessageDialog(this, "Document Approved!");}
-            else{
-                JOptionPane.showMessageDialog(this, "Document not found in server");}   
-            } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error sending message: " + e.getMessage());
-        } 
+    try {
+        String stampedFileName = a.addDigitalStamp(pdfFile_Name.getName(), stampText, selectedMessage.getFile_Type());
+
+        if (stampedFileName != null) {
+            String fileType = selectedMessage.getFile_Type();
+            String originalSender = selectedMessage.getUsername();
+
+            if (isPrivateCheckbox.isSelected()) {
+                dbService.saveMessagePrivate(fileType, stampedFileName, "private", username, originalSender, approvedMessage);
+            } else {
+                String recipientDept = dbService.DeptFetcher(originalSender);
+                dbService.saveMessage(fileType, stampedFileName, "broadcast", username, recipientDept, approvedMessage);
+            }
+
+            JOptionPane.showMessageDialog(this, "Document Approved!");
+        } else {
+            JOptionPane.showMessageDialog(this, "Document not found in server.");
+        }
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Error sending message: " + e.getMessage());
+    }
     }//GEN-LAST:event_MD_Approve_ButtonActionPerformed
 
     private void sendMessageButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendMessageButtonActionPerformed
@@ -1027,6 +1068,10 @@ if (evt.getSource() == CAD_Attach_Button) {
         // TODO add your handling code here:
     }//GEN-LAST:event_To_Department_Combo_InboxActionPerformed
 
+    private void isPrivateCheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_isPrivateCheckboxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_isPrivateCheckboxActionPerformed
+
 
     /**
      * @param args the command line arguments
@@ -1109,6 +1154,7 @@ public static void main(String args[]) {
     private javax.swing.JLabel Username_Label;
     private javax.swing.JLabel Verdict_Label;
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JCheckBox isPrivateCheckbox;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;

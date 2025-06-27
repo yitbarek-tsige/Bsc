@@ -173,7 +173,7 @@ public class ControlPanel extends javax.swing.JFrame {
                 {null, null, null, null, null}
             },
             new String [] {
-                "id", "username", "passsword", "department", "role"
+                "id", "username", "passsword", "role", "department"
             }
         ));
         Registered_Users_Pane.setViewportView(Registered_Users_Table);

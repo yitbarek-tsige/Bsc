@@ -50,7 +50,7 @@ public class UserLogin extends javax.swing.JFrame {
         LoginError = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("MOHA Office Solution Suit");
+        setTitle("UoG Office Solution Suit");
         setIconImages(null);
         setLocation(new java.awt.Point(0, 0));
         setResizable(false);
